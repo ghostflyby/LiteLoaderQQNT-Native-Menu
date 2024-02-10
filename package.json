@@ -1,0 +1,12 @@
+{
+  "name": "nativemenu",
+  "author": "ghostflyby",
+  "license": "GPL-3.0-only",
+  "devDependencies": {
+    "electron": "^28.1.4",
+    "liteloaderqqnt-types": "^1.0.1"
+  },
+  "scripts": {
+    "build": "pnpm --package=typescript dlx tsc -p tsconfig.json && perl -ni -e 'print unless /Object\\.defineProperty\\(exports, \"__esModule\", { value: true }\\);/' dist/*"
+  }
+}

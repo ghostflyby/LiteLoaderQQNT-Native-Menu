@@ -2,14 +2,14 @@
     "$schema": "./manifest_schema.json",
     "manifest_version": 4,
     "type": "extension",
-    "name": "插件模板",
-    "slug": "plugin_template",
-    "description": "LiteLoaderQQNT的插件模板",
+    "name": "Native Conetxt Menu",
+    "slug": "native-menu",
+    "description": "为右键菜单使用原生形式",
     "version": "0.1.0",
     "icon": "./icon.png",
     "authors": [
         {
-            "name": "LiteLoaderQQNT",
+            "name": "ghostflyby",
             "link": "https://github.com/LiteLoaderQQNT"
         }
     ],
@@ -19,9 +19,9 @@
         "darwin"
     ],
     "injects": {
-        "renderer": "./src/renderer.js",
-        "main": "./src/main.js",
-        "preload": "./src/preload.js"
+        "renderer": "./dist/renderer.js",
+        "main": "./dist/main.js",
+        "preload": "./dist/preload.js"
     },
     "repository": {
         "repo": "LiteLoaderQQNT/Plugin-Template",

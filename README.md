@@ -1,4 +1,3 @@
-# Plugin-Template
+# Native Context Menu
 
-LiteLoaderQQNT的插件模板  
-LiteLoaderQQNT本体：[LiteLoaderQQNT](https://github.com/mo-jinran/LiteLoaderQQNT)
+replace the context menu with the native one.
