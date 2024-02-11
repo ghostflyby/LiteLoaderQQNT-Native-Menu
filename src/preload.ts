@@ -1,7 +1,8 @@
 import { ipcRenderer, contextBridge } from 'electron';
 
 export interface MenuItemOptionWithParentLabel extends Electron.MenuItemConstructorOptions {
-	parentLabel: string[]
+	parentLabel: string[],
+	submenu?: MenuItemOptionWithParentLabel[],
 }
 
 
@@ -15,10 +16,7 @@ function createMenuItemTemplate(menuItem: Element, index: number, array: Array<E
 			return {
 				label: text,
 				type: "normal",
-				enabled: menuItem.ariaDisabled == "false",
-				click: () => {
-					// ipcMain.emit('context-menu-command',)
-				},
+				enabled: menuItem.hasAttribute("disabled") ? false : true,
 				parentLabel: parentLabel
 			}
 		case "sub-menu":
@@ -68,6 +66,12 @@ contextBridge.exposeInMainWorld("NativeContextMenu",
 		},
 	})
 
-ipcRenderer.on('context-menu-command', (e, command: string) => {
-
+ipcRenderer.on('context-menu-command', (e, parentLabel: string[], command: string) => {
+	let menu = document.querySelector("div.q-context-menu")
+	if (!menu) return
+	let item = Array.from(menu.children).find((item) => item.querySelector<HTMLElement>(".q-context-menu-item__text")?.innerText === command)
+	console.log(item)
+	if (item instanceof HTMLElement) {
+		item.click()
+	}
 })
