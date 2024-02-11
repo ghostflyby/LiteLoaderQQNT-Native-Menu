@@ -6,7 +6,7 @@ export interface MenuItemOptionWithParentLabel extends Electron.MenuItemConstruc
 }
 
 
-function createMenuItemTemplate(menuItem: Element, index: number, array: Array<Element>, parentLabel: string[] = []): MenuItemOptionWithParentLabel | null {
+function createMenuItemTemplate(menuItem: Element, parentLabel: string[] = []): MenuItemOptionWithParentLabel | null {
 	switch (menuItem.role) {
 		case "separator":
 			return { type: "separator", parentLabel: parentLabel }
@@ -26,11 +26,7 @@ function createMenuItemTemplate(menuItem: Element, index: number, array: Array<E
 }
 
 function getLabelText(menuItem: Element): string | null {
-	let label = menuItem.querySelector<HTMLElement>(".q-context-menu-item__text")
-	if (label != null) {
-		return label.innerText
-	}
-	return null
+	return menuItem.querySelector<HTMLElement>(".q-context-menu-item__text")?.innerText ?? null
 }
 
 function createSubMenuTemplate(menuItem: Element, parentLabel: string[] = []): MenuItemOptionWithParentLabel | null {
@@ -54,7 +50,7 @@ function createMenuTemplate(menu: HTMLCollection | undefined = undefined, parent
 	menu = menu ?? document.querySelector("div.q-context-menu")?.children
 	if (menu == null) return []
 	let re = Array.from(menu)
-		.map((menuItem: Element, index: number, array: Array<Element>) => createMenuItemTemplate(menuItem, index, array, parentLabel))
+		.map((menuItem: Element) => createMenuItemTemplate(menuItem, parentLabel))
 		.filter((value) => value !== null)
 	return re as MenuItemOptionWithParentLabel[]
 }
