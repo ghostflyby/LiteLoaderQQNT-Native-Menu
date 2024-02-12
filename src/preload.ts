@@ -1,12 +1,12 @@
 import { ipcRenderer, contextBridge } from 'electron';
 
 export interface MenuItemOptionWithParentLabel extends Electron.MenuItemConstructorOptions {
-	parentLabel: string[],
+	parentLabel?: string,
 	submenu?: MenuItemOptionWithParentLabel[],
 }
 
 
-async function createMenuItemTemplate(menuItem: Element, parentLabel: string[] = []): Promise<MenuItemOptionWithParentLabel | null> {
+async function createMenuItemTemplate(menuItem: Element, parentLabel: string | undefined): Promise<MenuItemOptionWithParentLabel | null> {
 	switch (menuItem.role) {
 		case "separator":
 			return { type: "separator", parentLabel: parentLabel }
@@ -29,25 +29,24 @@ function getLabelText(menuItem: Element): string | null {
 	return menuItem.querySelector<HTMLElement>(".q-context-menu-item__text")?.innerText ?? null
 }
 
-async function createSubMenuTemplate(menuItem: Element, parentLabel: string[] = []): Promise<MenuItemOptionWithParentLabel | null> {
+async function createSubMenuTemplate(menuItem: Element): Promise<MenuItemOptionWithParentLabel | null> {
+	let text = getLabelText(menuItem)
 	menuItem.dispatchEvent(new MouseEvent("mouseenter"))
 	await new Promise((resolve) => setTimeout(resolve, 300))
-	let text = getLabelText(menuItem)
 	if (text === null) return null
 	let submenu = menuItem.querySelector<HTMLElement>(".q-context-sub-menu__container")
 	if (submenu != null) {
 		return {
 			label: text,
-			submenu: await createMenuTemplate(submenu.children, [...parentLabel, text]),
+			submenu: await createMenuTemplate(submenu.children, text),
 			type: "submenu",
-			parentLabel: parentLabel
 		}
 	}
 	return null
 }
 
 
-async function createMenuTemplate(menu: HTMLCollection | undefined = undefined, parentLabel: string[] = []): Promise<MenuItemOptionWithParentLabel[]> {
+async function createMenuTemplate(menu: HTMLCollection | undefined = undefined, parentLabel: string | undefined = undefined): Promise<MenuItemOptionWithParentLabel[]> {
 	menu = menu ?? document.querySelector("div.q-context-menu")?.children
 	if (menu == null) return []
 	let re = Array.from(menu)
@@ -65,8 +64,16 @@ contextBridge.exposeInMainWorld("NativeContextMenu",
 		},
 	})
 
-ipcRenderer.on('context-menu-command', (e, parentLabel: string[], command: string) => {
+ipcRenderer.on('context-menu-command', (e, parentLabel: string | undefined, command: string) => {
 	let menu = document.querySelector("div.q-context-menu")
+	if (!menu) return
+	if (parentLabel) {
+		let item = Array.from(menu.children).find((item) => item.querySelector<HTMLElement>(".q-context-menu-item__text")?.innerText === parentLabel)
+		if (item instanceof HTMLElement) {
+			item.dispatchEvent(new MouseEvent("mouseenter"))
+		}
+		menu = item?.querySelector<HTMLElement>(".q-context-sub-menu__container") ?? null
+	}
 	if (!menu) return
 	let item = Array.from(menu.children).find((item) => item.querySelector<HTMLElement>(".q-context-menu-item__text")?.innerText === command)
 	console.log(item)
