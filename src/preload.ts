@@ -20,7 +20,7 @@ async function createMenuItemTemplate(menuItem: Element, parentLabel: string | u
 				parentLabel: parentLabel
 			}
 		case "sub-menu":
-			return createSubMenuTemplate(menuItem)
+			return null
 	}
 	return null;
 }
@@ -28,23 +28,6 @@ async function createMenuItemTemplate(menuItem: Element, parentLabel: string | u
 function getLabelText(menuItem: Element): string | null {
 	return menuItem.querySelector<HTMLElement>(".q-context-menu-item__text")?.innerText ?? null
 }
-
-async function createSubMenuTemplate(menuItem: Element): Promise<MenuItemOptionWithParentLabel | null> {
-	let text = getLabelText(menuItem)
-	menuItem.dispatchEvent(new MouseEvent("mouseenter"))
-	await new Promise((resolve) => setTimeout(resolve, 300))
-	if (text === null) return null
-	let submenu = menuItem.querySelector<HTMLElement>(".q-context-sub-menu__container")
-	if (submenu != null) {
-		return {
-			label: text,
-			submenu: await createMenuTemplate(submenu.children, text),
-			type: "submenu",
-		}
-	}
-	return null
-}
-
 
 async function createMenuTemplate(menu: HTMLCollection | undefined = undefined, parentLabel: string | undefined = undefined): Promise<MenuItemOptionWithParentLabel[]> {
 	menu = menu ?? document.querySelector("div.q-context-menu")?.children
