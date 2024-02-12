@@ -6,7 +6,7 @@ export interface MenuItemOptionWithParentLabel extends Electron.MenuItemConstruc
 }
 
 
-function createMenuItemTemplate(menuItem: Element, parentLabel: string[] = []): MenuItemOptionWithParentLabel | null {
+async function createMenuItemTemplate(menuItem: Element, parentLabel: string[] = []): Promise<MenuItemOptionWithParentLabel | null> {
 	switch (menuItem.role) {
 		case "separator":
 			return { type: "separator", parentLabel: parentLabel }
@@ -29,15 +29,16 @@ function getLabelText(menuItem: Element): string | null {
 	return menuItem.querySelector<HTMLElement>(".q-context-menu-item__text")?.innerText ?? null
 }
 
-function createSubMenuTemplate(menuItem: Element, parentLabel: string[] = []): MenuItemOptionWithParentLabel | null {
+async function createSubMenuTemplate(menuItem: Element, parentLabel: string[] = []): Promise<MenuItemOptionWithParentLabel | null> {
 	menuItem.dispatchEvent(new MouseEvent("mouseenter"))
+	await new Promise((resolve) => setTimeout(resolve, 300))
 	let text = getLabelText(menuItem)
 	if (text === null) return null
 	let submenu = menuItem.querySelector<HTMLElement>(".q-context-sub-menu__container")
 	if (submenu != null) {
 		return {
 			label: text,
-			submenu: createMenuTemplate(submenu.children, [...parentLabel, text]),
+			submenu: await createMenuTemplate(submenu.children, [...parentLabel, text]),
 			type: "submenu",
 			parentLabel: parentLabel
 		}
@@ -46,19 +47,21 @@ function createSubMenuTemplate(menuItem: Element, parentLabel: string[] = []): M
 }
 
 
-function createMenuTemplate(menu: HTMLCollection | undefined = undefined, parentLabel: string[] = []): MenuItemOptionWithParentLabel[] {
+async function createMenuTemplate(menu: HTMLCollection | undefined = undefined, parentLabel: string[] = []): Promise<MenuItemOptionWithParentLabel[]> {
 	menu = menu ?? document.querySelector("div.q-context-menu")?.children
 	if (menu == null) return []
 	let re = Array.from(menu)
 		.map((menuItem: Element) => createMenuItemTemplate(menuItem, parentLabel))
-		.filter((value) => value !== null)
-	return re as MenuItemOptionWithParentLabel[]
+	return (await Promise.all(re)).filter((item) => item !== null) as MenuItemOptionWithParentLabel[]
 }
 
 contextBridge.exposeInMainWorld("NativeContextMenu",
 	{
 		show: () => {
-			ipcRenderer.send('native-context-menu', createMenuTemplate())
+			createMenuTemplate().then((templates) => {
+				console.log(templates)
+				ipcRenderer.send('native-context-menu', templates)
+			})
 		},
 	})
 
