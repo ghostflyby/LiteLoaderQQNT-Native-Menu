@@ -1,9 +1,10 @@
 // 运行在 Electron 渲染进程 下的页面脚本
 
-import { type MenuItemOptionInRenderer, NativeContextMenu } from './NativeContextMenu'
+import { type MenuItemOptionInRenderer } from './NativeContextMenu'
 
 async function createMenuItemTemplate (menuItem: Element, parentLabel: string | undefined): Promise<MenuItemOptionInRenderer | null> {
   const text = getLabelText(menuItem)
+  const checked = ((menuItem as any)?.__VUE__[0]?.props?.icon === 'tick')
   switch (menuItem.role) {
     case 'separator':
       return { type: 'separator', parentLabel }
@@ -11,9 +12,10 @@ async function createMenuItemTemplate (menuItem: Element, parentLabel: string | 
       if (text === null) return null
       return {
         label: text,
-        type: 'normal',
+        type: checked ? 'checkbox' : 'normal',
         enabled: !menuItem.hasAttribute('disabled'),
-        parentLabel
+        parentLabel,
+        checked: checked ? true : undefined
       }
     case 'sub-menu':
       return await createSubMenuTemplate(menuItem)
@@ -27,6 +29,7 @@ function getLabelText (menuItem: Element): string | null {
 
 async function createSubMenuTemplate (menuItem: Element): Promise<MenuItemOptionInRenderer | null> {
   const text = getLabelText(menuItem)
+  await new Promise((resolve) => setTimeout(resolve, 2))
   await (menuItem as any).__VUE__?.[0]?.proxy?.showMenu()
   if (text === null) return null
   const submenu = menuItem.querySelector<HTMLElement>('.q-context-sub-menu__container')
