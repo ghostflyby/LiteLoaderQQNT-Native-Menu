@@ -1,5 +1,5 @@
 import { BrowserWindow, ipcMain, Menu } from 'electron'
-import { MenuItemOptionWithParentLabel } from './preload'
+import { MenuItemOptionWithParentLabel } from './NativeContextMenu'
 
 // 创建窗口时触发
 module.exports.onBrowserWindowCreated = (window: BrowserWindow) => {

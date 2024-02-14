@@ -1,66 +1,11 @@
 import { ipcRenderer, contextBridge } from 'electron';
-
-export interface MenuItemOptionWithParentLabel extends Electron.MenuItemConstructorOptions {
-	parentLabel?: string,
-	submenu?: MenuItemOptionWithParentLabel[],
-}
-
-
-async function createMenuItemTemplate(menuItem: Element, parentLabel: string | undefined): Promise<MenuItemOptionWithParentLabel | null> {
-	switch (menuItem.role) {
-		case "separator":
-			return { type: "separator", parentLabel: parentLabel }
-		case "menuitem":
-			let text = getLabelText(menuItem)
-			if (text === null) return null
-			return {
-				label: text,
-				type: "normal",
-				enabled: menuItem.hasAttribute("disabled") ? false : true,
-				parentLabel: parentLabel
-			}
-		case "sub-menu":
-			return createSubMenuTemplate(menuItem)
-	}
-	return null;
-}
-
-function getLabelText(menuItem: Element): string | null {
-	return menuItem.querySelector<HTMLElement>(".q-context-menu-item__text")?.innerText ?? null
-}
-
-async function createSubMenuTemplate(menuItem: Element): Promise<MenuItemOptionWithParentLabel | null> {
-	let text = getLabelText(menuItem)
-	menuItem.dispatchEvent(new MouseEvent("mouseenter"))
-	await new Promise((resolve) => setTimeout(resolve, 300))
-	if (text === null) return null
-	let submenu = menuItem.querySelector<HTMLElement>(".q-context-sub-menu__container")
-	if (submenu != null) {
-		return {
-			label: text,
-			submenu: await createMenuTemplate(submenu.children, text),
-			type: "submenu",
-		}
-	}
-	return null
-}
-
-
-async function createMenuTemplate(menu: HTMLCollection | undefined = undefined, parentLabel: string | undefined = undefined): Promise<MenuItemOptionWithParentLabel[]> {
-	menu = menu ?? document.querySelector("div.q-context-menu")?.children
-	if (menu == null) return []
-	let re = Array.from(menu)
-		.map((menuItem: Element) => createMenuItemTemplate(menuItem, parentLabel))
-	return (await Promise.all(re)).filter((item) => item !== null) as MenuItemOptionWithParentLabel[]
-}
+import { MenuItemOptionInRenderer } from './NativeContextMenu';
 
 contextBridge.exposeInMainWorld("NativeContextMenu",
 	{
-		show: () => {
-			createMenuTemplate().then((templates) => {
-				console.log(templates)
-				ipcRenderer.send('native-context-menu', templates)
-			})
+		show: (template: MenuItemOptionInRenderer[]) => {
+			console.log(template)
+			ipcRenderer.send('native-context-menu', template)
 		},
 	})
 

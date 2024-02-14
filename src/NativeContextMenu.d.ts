@@ -1,9 +1,15 @@
 
 interface NativeContextMenu {
-	show: () => void
+	show: (template: MenuItemOptionInRenderer[]) => void
 }
 
-export global {
-	declare var NativeContextMenu: NativeContextMenu
+export const NativeContextMenu: NativeContextMenu
+
+export interface MenuItemOptionWithParentLabel extends Electron.MenuItemConstructorOptions {
+	parentLabel?: string,
+	submenu?: MenuItemOptionWithParentLabel[],
 }
 
+export interface MenuItemOptionInRenderer extends MenuItemOptionWithParentLabel {
+	click?: undefined,
+}
