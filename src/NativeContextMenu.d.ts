@@ -1,15 +1,14 @@
-
-interface NativeContextMenu {
-	show: (template: MenuItemOptionInRenderer[]) => void
+interface INativeContextMenu {
+  show: (template: MenuItemOptionInRenderer[]) => void
 }
 
-export const NativeContextMenu: NativeContextMenu
+export const NativeContextMenu: INativeContextMenu
 
 export interface MenuItemOptionWithParentLabel extends Electron.MenuItemConstructorOptions {
-	parentLabel?: string,
-	submenu?: MenuItemOptionWithParentLabel[],
+  parentLabel?: string
+  submenu?: MenuItemOptionWithParentLabel[]
 }
 
 export interface MenuItemOptionInRenderer extends MenuItemOptionWithParentLabel {
-	click?: undefined,
+  click?: undefined
 }
