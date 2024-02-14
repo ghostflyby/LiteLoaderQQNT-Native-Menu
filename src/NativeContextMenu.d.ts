@@ -1,8 +1,9 @@
 interface INativeContextMenu {
   show: (template: MenuItemOptionInRenderer[]) => void
 }
-
-export const NativeContextMenu: INativeContextMenu
+declare global {
+  const NativeContextMenu: INativeContextMenu
+}
 
 export interface MenuItemOptionWithParentLabel extends Electron.MenuItemConstructorOptions {
   parentLabel?: string
