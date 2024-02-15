@@ -9,13 +9,13 @@ contextBridge.exposeInMainWorld('NativeContextMenu',
     }
   })
 
-ipcRenderer.on('context-menu-command', (e, parentLabel: string | undefined, command: string) => {
+async function handleContextMenuCommand (parentLabel: string | undefined, command: string): Promise<void> {
   let menu = document.querySelector('div.q-context-menu')
   if (menu == null) return
   if (parentLabel != null) {
     const item = Array.from(menu.children).find((item) => item.querySelector<HTMLElement>('.q-context-menu-item__text')?.innerText === parentLabel)
     if (item instanceof HTMLElement) {
-      item.dispatchEvent(new MouseEvent('mouseenter'))
+      await (item as any).__VUE__?.[0]?.proxy?.showMenu()
     }
     menu = item?.querySelector<HTMLElement>('.q-context-sub-menu__container') ?? null
   }
@@ -25,4 +25,8 @@ ipcRenderer.on('context-menu-command', (e, parentLabel: string | undefined, comm
   if (item instanceof HTMLElement) {
     item.click()
   }
+}
+
+ipcRenderer.on('context-menu-command', (e, parentLabel: string | undefined, command: string) => {
+  handleContextMenuCommand(parentLabel, command).catch(console.error)
 })
