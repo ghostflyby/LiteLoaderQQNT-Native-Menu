@@ -4,7 +4,7 @@ import { type MenuItemOptionInRenderer } from './NativeContextMenu'
 
 async function createMenuItemTemplate (menuItem: Element, parentLabel: string | undefined): Promise<MenuItemOptionInRenderer | null> {
   const text = getLabelText(menuItem)
-  const checked = ((menuItem as any)?.__VUE__[0]?.props?.icon === 'tick')
+  const checked = ((menuItem as any)?.__VUE__?.[0]?.props?.icon === 'tick')
   switch (menuItem.role) {
     case 'separator':
       return { type: 'separator', parentLabel }
@@ -30,7 +30,7 @@ function getLabelText (menuItem: Element): string | null {
 async function createSubMenuTemplate (menuItem: Element): Promise<MenuItemOptionInRenderer | null> {
   const text = getLabelText(menuItem)
   await new Promise((resolve) => setTimeout(resolve, 2))
-  await (menuItem as any).__VUE__?.[0]?.proxy?.showMenu()
+  await (menuItem as any)?.__VUE__?.[0]?.proxy?.showMenu()
   if (text === null) return null
   const submenu = menuItem.querySelector<HTMLElement>('.q-context-sub-menu__container')
   if (submenu != null) {
@@ -44,7 +44,8 @@ async function createSubMenuTemplate (menuItem: Element): Promise<MenuItemOption
 }
 
 async function createMenuTemplate (menu: HTMLCollection | undefined = undefined, parentLabel: string | undefined = undefined): Promise<MenuItemOptionInRenderer[]> {
-  menu = menu ?? document.querySelector('div.q-context-menu')?.children
+  await new Promise((resolve) => setTimeout(resolve, 2))
+  menu = menu ?? document.querySelector('.q-context-menu__mixed-type')?.children
   if (menu == null) return []
   const re = Array.from(menu)
     .map(async (menuItem: Element) => await createMenuItemTemplate(menuItem, parentLabel))
