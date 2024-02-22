@@ -6,7 +6,7 @@
     "slug": "native-menu",
     "description": "为右键菜单使用原生形式，多级菜单支持需要hook-vue来运行",
     "version": "0.1.0",
-    "icon": "./icon.png",
+    "icon": "./icon.svg",
     "authors": [
         {
             "name": "ghostflyby",
