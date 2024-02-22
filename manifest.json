@@ -4,13 +4,13 @@
     "type": "extension",
     "name": "Native Conetxt Menu",
     "slug": "native-menu",
-    "description": "为右键菜单使用原生形式",
+    "description": "为右键菜单使用原生形式，多级菜单支持需要hook-vue来运行",
     "version": "0.1.0",
     "icon": "./icon.png",
     "authors": [
         {
             "name": "ghostflyby",
-            "link": "https://github.com/LiteLoaderQQNT"
+            "link": "https://github.com/ghostflyby/"
         }
     ],
     "platform": [
@@ -24,11 +24,11 @@
         "preload": "./dist/preload.js"
     },
     "repository": {
-        "repo": "LiteLoaderQQNT/Plugin-Template",
+        "repo": "ghostflyby/LiteLoaderQQNT-Native-Menu",
         "branch": "main",
         "release": {
             "tag": "0.1.0",
-            "file": "Plugin-Template.zip"
+            "file": "release.zip"
         }
     }
 }
