@@ -27,9 +27,12 @@ jobs:
           echo "Previous version: $previous_version"
 
       - name: "pnpm install"
+        if: ${{ steps.read-versions.outputs.version != steps.read-versions.outputs.previous-version }}
         uses: pnpm/action-setup@v3
         with:
           version: latest
+          run_install: |
+              - recursive: true
 
       - name: "pnpm build"
         if: ${{ steps.read-versions.outputs.version != steps.read-versions.outputs.previous-version }}
