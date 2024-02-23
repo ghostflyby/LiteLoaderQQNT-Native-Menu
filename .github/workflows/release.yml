@@ -53,6 +53,6 @@ jobs:
       - name: "Create Release"
         if: ${{ steps.read-versions.outputs.version != steps.read-versions.outputs.previous-version }}
         run: |
-          gh release create "v${{ steps.read-versions.outputs.version }}" *.zip --generate-notes
+          gh release create "${{ steps.read-versions.outputs.version }}" *.zip --generate-notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
