@@ -52,11 +52,7 @@ jobs:
 
       - name: "Create Release"
         if: ${{ steps.read-versions.outputs.version != steps.read-versions.outputs.previous-version }}
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          automatic_release_tag: "${{ steps.read-versions.outputs.version }}"
-          title: "${{ steps.read-versions.outputs.version }}"
-          files: |
-            "${{github.event.repository.name}}-release.zip"
+        run: |
+          gh release create "v${{ steps.read-versions.outputs.version }}" *.zip --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
