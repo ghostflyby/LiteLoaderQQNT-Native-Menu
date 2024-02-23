@@ -5,7 +5,7 @@
     "name": "Native Conetxt Menu",
     "slug": "native-menu",
     "description": "为右键菜单使用原生形式，多级菜单支持需要hook-vue来运行",
-    "version": "0.0.5",
+    "version": "1.0.0",
     "icon": "./icon.svg",
     "authors": [
         {
@@ -27,7 +27,7 @@
         "repo": "ghostflyby/LiteLoaderQQNT-Native-Menu",
         "branch": "main",
         "release": {
-            "tag": "0.0.5",
+            "tag": "1.0.0",
             "file": "LiteLoaderQQNT-Native-Menu-release.zip"
         }
     }
