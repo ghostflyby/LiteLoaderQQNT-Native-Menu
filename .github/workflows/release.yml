@@ -26,11 +26,15 @@ jobs:
           echo "previous-version=previous_version$" >> "$GITHUB_OUTPUT"
           echo "Previous version: $previous_version"
 
+      - name: "pnpm install"
+        uses: pnpm/action-setup@v3
+        with:
+          version: latest
+
       - name: "pnpm build"
         if: ${{ steps.read-versions.outputs.version != steps.read-versions.outputs.previous-version }}
         run: |
           echo "Building the project..."
-          pnpm install
           pnpm run build
           echo "Done!"
 
