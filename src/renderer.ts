@@ -59,3 +59,10 @@ const observer = new MutationObserver(() => {
 observer.observe(document.body, {
   childList: true
 })
+
+const style = document.createElement('style')
+style.textContent = `
+  .q-context-menu__mixed-type {
+    display: none !important;
+  }`
+document.head.appendChild(style)
