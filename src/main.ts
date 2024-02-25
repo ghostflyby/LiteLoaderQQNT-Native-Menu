@@ -21,6 +21,7 @@ console.log('[Native Context Menu]: Registering IPC event listener...')
 ipcMain.on('native-context-menu', (e, templates: MenuItemOptionWithParentLabel[]) => {
   console.log('[Native Context Menu]: Received IPC event, showing context menu...')
   console.log(templates)
+  if (templates.length === 0) return
   addClickEvent(templates)
   const menu = Menu.buildFromTemplate(templates)
   menu.addListener('menu-will-close', () => { document.body.click() })
