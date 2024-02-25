@@ -3,7 +3,7 @@ import type { MenuItemOptionWithParentLabel } from './NativeContextMenu'
 
 // 创建窗口时触发
 module.exports.onBrowserWindowCreated = (window: BrowserWindow) => {
-  window.showAllTabs()
+
 }
 
 function addClickEvent (templates: MenuItemOptionWithParentLabel[]): void {
