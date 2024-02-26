@@ -37,18 +37,21 @@ jobs:
               - recursive: true
 
       - name: "pnpm build"
+        if: ${{ steps.read-versions.outputs.version != steps.read-versions.outputs.previous-version }}
         run: |
           echo "Building the project..."
           pnpm run build
           echo "Done!"
 
       - name: "Zip release files" # Only if the version has been updated
+        if: ${{ steps.read-versions.outputs.version != steps.read-versions.outputs.previous-version }}
         run: |
           echo "Creating a release zip file..."
           zip -r "${{github.event.repository.name}}-release.zip" dist/ LICENSE README.md manifest.json
           echo "Done!"
 
       - name: "Create Release"
+        if: ${{ steps.read-versions.outputs.version != steps.read-versions.outputs.previous-version }}
         run: |
           gh release create "${{ steps.read-versions.outputs.version }}" *.zip --generate-notes
         env:
