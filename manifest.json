@@ -2,7 +2,7 @@
     "$schema": "./manifest_schema.json",
     "manifest_version": 4,
     "type": "extension",
-    "name": "Native Conetxt Menu",
+    "name": "Native Context Menu",
     "slug": "native-menu",
     "description": "为右键菜单使用原生形式，多级菜单支持需要hook-vue来运行",
     "version": "1.0.3",
