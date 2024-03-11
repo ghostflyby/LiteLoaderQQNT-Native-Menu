@@ -47,7 +47,7 @@ jobs:
         if: ${{ steps.read-versions.outputs.version != steps.read-versions.outputs.previous-version }}
         run: |
           echo "Creating a release zip file..."
-          zip -r "${{github.event.repository.name}}-release.zip" dist/ LICENSE README.md manifest.json
+          zip -r "${{github.event.repository.name}}-release.zip" dist/ LICENSE README.md manifest.json icon.*=svg
           echo "Done!"
 
       - name: "Create Release"
