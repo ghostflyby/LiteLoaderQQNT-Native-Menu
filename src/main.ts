@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain, Menu } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu } from 'electron'
 import type { MenuItemOptionWithParentLabel } from './NativeContextMenu'
 
 // 创建窗口时触发
@@ -26,4 +26,10 @@ ipcMain.on('native-context-menu', (e, templates: MenuItemOptionWithParentLabel[]
   const menu = Menu.buildFromTemplate(templates)
   menu.addListener('menu-will-close', () => { document.body.click() })
   menu.popup()
+})
+
+app.on('web-contents-created', (_, contents) => {
+  contents.on('context-menu', (e, option) => {
+    e.preventDefault()
+  })
 })

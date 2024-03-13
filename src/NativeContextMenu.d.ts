@@ -1,5 +1,5 @@
 interface INativeContextMenu {
-  show: (template: MenuItemOptionInRenderer[]) => void
+  show: () => void
 }
 declare global {
   const NativeContextMenu: INativeContextMenu
