@@ -3,7 +3,7 @@
 const observer = new MutationObserver(NativeContextMenu.show)
 
 observer.observe(document.body, {
-  childList: true
+  childList: true,
 })
 
 const style = document.createElement('style')

@@ -3,22 +3,31 @@
         "browser": true,
         "es2021": true
     },
-    "plugins": [
-        "@stylistic"
-    ],
     "extends": [
-        "standard-with-typescript",
-        "plugin:@stylistic/disable-legacy"
+        "standard-with-typescript"
     ],
     "parserOptions": {
         "ecmaVersion": "latest"
     },
-    "rules": {
-        "@stylistic/comma-dangle": [
-            "error",
-            "always-multiline"
-        ]
-    },
+    "overrides": [
+        {
+            "files": [
+                "*.ts",
+                "*.js"
+            ],
+            "rules": {
+                "comma-dangle": [
+                    "error",
+                    "always-multiline"
+                ],
+                "@typescript-eslint/comma-dangle": [
+                    "error",
+                    "always-multiline"
+                ]
+            }
+        }
+    ],
+    "rules": {},
     "ignorePatterns": [
         "build.mjs"
     ]
