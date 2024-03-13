@@ -1,5 +1,5 @@
 {
-    "$schema": "./manifest_schema.json",
+    "$schema": "https://gist.githubusercontent.com/ghostflyby/f84c7f8a6a3c2fbbeedab109d31a10c2/raw/schema.json",
     "manifest_version": 4,
     "type": "extension",
     "name": "Native Context Menu",
