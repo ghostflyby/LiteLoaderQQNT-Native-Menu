@@ -3,10 +3,23 @@
         "browser": true,
         "es2021": true
     },
-    "extends": "standard-with-typescript",
+    "plugins": [
+        "@stylistic"
+    ],
+    "extends": [
+        "standard-with-typescript",
+        "plugin:@stylistic/disable-legacy"
+    ],
     "parserOptions": {
         "ecmaVersion": "latest"
     },
     "rules": {
-    }
+        "@stylistic/comma-dangle": [
+            "error",
+            "always-multiline"
+        ]
+    },
+    "ignorePatterns": [
+        "build.mjs"
+    ]
 }
