@@ -1,6 +1,14 @@
 // 运行在 Electron 渲染进程 下的页面脚本
 
-const observer = new MutationObserver(NativeContextMenu.show)
+import { createMenuTemplate } from './renderer/menu'
+
+const observer = new MutationObserver(
+  () => {
+    createMenuTemplate()
+      .then(NativeContextMenu.show)
+      .catch(console.error)
+  },
+)
 
 observer.observe(document.body, {
   childList: true,

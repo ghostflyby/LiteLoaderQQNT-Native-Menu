@@ -1,12 +1,10 @@
 import { ipcRenderer, contextBridge } from 'electron'
-import { createMenuTemplate, handleContextMenuCommand } from './preload/menu'
-import { type INativeContextMenu } from './all/NativeContextMenu'
+import { handleContextMenuCommand } from './renderer/menu'
+import { type MenuItemOptionWithParentLabel, type INativeContextMenu } from './all/NativeContextMenu'
 
 const obj: INativeContextMenu = {
-  show: () => {
-    createMenuTemplate()
-      .then((template) => { ipcRenderer.send('native-context-menu', template) })
-      .catch(console.error)
+  show: (menuOptions: MenuItemOptionWithParentLabel[]) => {
+    ipcRenderer.send('native-context-menu', menuOptions)
   },
 }
 

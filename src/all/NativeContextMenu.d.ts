@@ -1,5 +1,5 @@
 interface INativeContextMenu {
-  show: () => void
+  show: (menuOptions: MenuItemOptionWithParentLabel[]) => void
 }
 declare global {
   const NativeContextMenu: INativeContextMenu
